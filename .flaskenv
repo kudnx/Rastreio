@@ -1,0 +1,2 @@
+FLASK_APP=rastreio.py
+FLASK_ENV=development
