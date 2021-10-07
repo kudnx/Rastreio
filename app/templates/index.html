@@ -2,7 +2,18 @@
 
 {% block content %}
     <h1>Olá, {{ user.username }}</h1><br><br>
-    {% for encomenda in encomendas %}
-    <div><p>{{ encomenda.nome }}</p><p>{{ encomenda.cod }}</p></div>
-    {% endfor %}
+    <table>
+        <tr>
+            <th>Descrição</th>
+            <th>Código</th>
+            <th>Rastrear</th>
+        </tr>
+        {% for package in packages %}
+        <tr>
+            <td>{{ package.description }}</td>
+            <td>{{ package.cod }}</td>
+            <td><a href="{{ url_for('track', cod=package.cod) }}">Rastrear</a></td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
