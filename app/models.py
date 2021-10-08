@@ -8,3 +8,12 @@ class Package(db.Model):
 
     def __repr__(self):
         return '<Encomenda {}>'.format(self.description)
+
+class PackageInformation():
+    quantity = 0
+    cod      = ""
+    descricao_envio = ""
+    destinatario = ""
+
+    def __repr__(self):
+        return '<Informação da Encomenda {}>'.format(self.quantity)

@@ -1,6 +1,7 @@
 {% extends "menu.html" %}
 
 {% block content %}
-    <h1>Olá usuario, o seu código de rastreio é:</h1><br><br>
-    <h2>{{ cod }}</h2>
+    <h1>Olá usuario, o seu código de rastreio é: {{ packageinformation.cod }}</h1>
+    <h2>Tipo de envio: {{ packageinformation.descricao_envio }}</h2>
+    <h3>Quantidade de produtos: {{ packageinformation.quantity }}</h3>
 {% endblock %}

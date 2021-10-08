@@ -2,7 +2,7 @@ from requests.models import Response
 from requests.sessions import Request
 from app import app, db
 from app.forms import PackageRegistrationForm
-from app.models import Package
+from app.models import Package, PackageInformation
 import requests
 from flask import render_template, flash, redirect, url_for
 
@@ -29,6 +29,10 @@ def package_registration():
 def track(cod):   
     link = "https://proxyapp.correios.com.br/v1/sro-rastro/" + cod
     response = requests.get(link)
-    return str(response.status_code)
+    data = response.json()
+    PackageInformation.quantity = data["quantidade"]
+    PackageInformation.cod = cod
+    PackageInformation.descricao_envio = data["objetos"][0]["tipoPostal"]["descricao"]
+    return render_template('track.html', title='Encomenda', packageinformation=PackageInformation)
 
 
