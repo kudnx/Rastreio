@@ -33,6 +33,12 @@ def track(cod):
     PackageInformation.quantity = data["quantidade"]
     PackageInformation.cod = cod
     PackageInformation.descricao_envio = data["objetos"][0]["tipoPostal"]["descricao"]
+
+    PackageInformation.descricao_evento.clear()
+
+    for description in data["objetos"][0]["eventos"]:
+        PackageInformation.descricao_evento.append(description["descricao"]) 
+
     return render_template('track.html', title='Encomenda', packageinformation=PackageInformation)
 
 

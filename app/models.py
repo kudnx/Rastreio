@@ -14,6 +14,7 @@ class PackageInformation():
     cod      = ""
     descricao_envio = ""
     destinatario = ""
+    descricao_evento = []
 
     def __repr__(self):
         return '<Informação da Encomenda {}>'.format(self.quantity)
