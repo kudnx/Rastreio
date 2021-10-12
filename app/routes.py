@@ -1,20 +1,56 @@
+from flask_login.utils import logout_user
 from requests.models import Response
 from requests.sessions import Request
 from app import app, db
-from app.forms import PackageRegistrationForm
-from app.models import Package, PackageInformation
+from app.forms import PackageRegistrationForm, LoginForm, RegisterForm
+from app.models import Package, PackageInformation, User
 import requests
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.urls import url_parse
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'username': 'Kyouhime'}
     packages = Package.query.all()
-    return render_template('index.html', title='Página Inicial', user=user, packages=packages)
+    return render_template('index.html', title='Página Inicial', packages=packages)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Nome de usuário ou senha Inválidos')
+            return redirect(url_for('index'))
+        login_user(user, remember=form.rememberMe.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
+    return render_template('login.html', title='Entrar', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        newUser = User(username=form.username.data)
+        newUser.set_password(form.password.data)
+        db.session.add(newUser)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('register.html', title='Cadastrar', form=form)
 
 @app.route('/package_registration', methods=['GET', 'POST'])
+@login_required
 def package_registration():
     form = PackageRegistrationForm()
     if  form.validate_on_submit():
@@ -26,6 +62,7 @@ def package_registration():
     return render_template('package_registration.html', title='Cadastro de Encomendas', form=form)
 
 @app.route('/track/<cod>')
+@login_required
 def track(cod):   
     link = "https://proxyapp.correios.com.br/v1/sro-rastro/" + cod
     response = requests.get(link)
