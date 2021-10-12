@@ -32,12 +32,35 @@ def track(cod):
     data = response.json()
     PackageInformation.quantity = data["quantidade"]
     PackageInformation.cod = cod
-    PackageInformation.descricao_envio = data["objetos"][0]["tipoPostal"]["descricao"]
+    PackageInformation.categoria = data["objetos"][0]["tipoPostal"]["categoria"]
 
-    PackageInformation.descricao_evento.clear()
+    PackageInformation.dados.clear()
 
-    for description in data["objetos"][0]["eventos"]:
-        PackageInformation.descricao_evento.append(description["descricao"]) 
+    for dados in data["objetos"][0]["eventos"]:
+        descricao = dados["descricao"]
+
+        dataHora = dados["dtHrCriado"].split("T")
+        
+        dia = dataHora[0].split("-")
+        dia = dia[2] + "/" + dia[1] + "/" + dia[0]
+        hora = dataHora[1]
+
+        try:
+            cidade = dados["unidade"]["endereco"]["cidade"]
+        except: 
+            cidade = dados["unidade"]["nome"]
+
+        try:
+            cidadeDestino = dados["unidadeDestino"]["endereco"]["cidade"]
+        except: 
+            cidadeDestino = ''
+
+        try:
+            detalhe = dados["detalhe"]
+        except: 
+            detalhe = ''
+
+        PackageInformation.dados.append([descricao, cidade, cidadeDestino, dia, hora, detalhe])
 
     return render_template('track.html', title='Encomenda', packageinformation=PackageInformation)
 

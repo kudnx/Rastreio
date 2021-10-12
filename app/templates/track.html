@@ -2,20 +2,30 @@
 
 {% block content %}
     <h1>Olá usuario, o seu código de rastreio é: {{ packageinformation.cod }}</h1>
-    <h2>Tipo de envio: {{ packageinformation.descricao_envio }}</h2>
+    <h2>Tipo de envio: {{ packageinformation.categoria }}</h2>
     <h3>Quantidade de produtos: {{ packageinformation.quantity }}</h3>
     <table>
-        <tr>
-            <th>Descrição do Evento</th>
-            <th>Código</th>
-            <th>Rastrear</th>
-        </tr>
-        {% for descricao_evento in packageinformation.descricao_evento %}
-        <tr>
-            <td>{{ descricao_evento }}</td>
-            <td>#</td>
-            <td>#</td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Cidade</th>
+                <th>Cidade de destino</th>
+                <th>Dia</th>
+                <th>Horário</th>
+                <th>Observação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dados in packageinformation.dados %}
+            <tr>
+                <td>{{ dados[0] }}</td>
+                <td>{{ dados[1] }}</td>
+                <td>{{ dados[2] }}</td>
+                <td>{{ dados[3] }}</td>
+                <td>{{ dados[4] }}</td>
+                <td>{{ dados[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 {% endblock %}
