@@ -13,7 +13,7 @@ from werkzeug.urls import url_parse
 @app.route('/')
 @app.route('/index')
 def index():
-    packages = Package.query.all()
+    packages = User.user_packages(current_user)
     return render_template('index.html', title='Página Inicial', packages=packages)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,7 +54,7 @@ def register():
 def package_registration():
     form = PackageRegistrationForm()
     if  form.validate_on_submit():
-        package = Package(description=form.description.data, cod=form.cod.data)
+        package = Package(description=form.description.data, cod=form.cod.data, user=current_user)
         db.session.add(package)
         db.session.commit()
         flash('Encomenda Cadastrada com sucesso!!')

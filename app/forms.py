@@ -9,7 +9,7 @@ class PackageRegistrationForm(FlaskForm):
     submit = SubmitField('Cadastrar Encomenda')
 
 class LoginForm(FlaskForm):
-    user = StringField('Usuário', validators=[DataRequired()])
+    username = StringField('Usuário', validators=[DataRequired()])
     password = PasswordField('Senha', validators=[DataRequired()])
     rememberMe = BooleanField('Lembre-me')
     submit = SubmitField('Login')

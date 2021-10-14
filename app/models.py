@@ -25,6 +25,9 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    def user_packages(self):
+        return Package.query.filter_by(user_id=self.id).order_by(Package.id.desc())
+
     def __repr__(self):
         return '<Usuário {}>'.format(self.username)
 
