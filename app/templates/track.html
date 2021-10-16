@@ -1,7 +1,8 @@
 {% extends "menu.html" %}
 
 {% block content %}
-    <h1>Olá usuario, o seu código de rastreio é: {{ packageinformation.cod }}</h1>
+    <h1>Olá {{ current_user.username }}, apresentando dados de rastreio para a encomenda: {{ package.description }}</h1>
+    <h2>Código de rastreio: {{ packageinformation.cod }}</h2>
     <h2>Tipo de envio: {{ packageinformation.categoria }}</h2>
     <h3>Quantidade de produtos: {{ packageinformation.quantity }}</h3>
     <table>

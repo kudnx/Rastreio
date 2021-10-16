@@ -10,6 +10,9 @@ class Package(db.Model):
     cod = db.Column(db.String(13))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    def package_description(cod):
+        return Package.query.filter_by(cod=cod).first()
+
     def __repr__(self):
         return '<Encomenda {}>'.format(self.description)
 
@@ -37,6 +40,7 @@ class PackageInformation():
     categoria = ""
     destinatario = ""
     dados = [[]]
+    
 
     def __repr__(self):
         return '<Informação da Encomenda {}>'.format(self.quantity)

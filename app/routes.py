@@ -1,10 +1,7 @@
 from flask_login.utils import logout_user
-from requests.models import Response
-from requests.sessions import Request
-from app import app, db
+from app import app, db, function
 from app.forms import PackageRegistrationForm, LoginForm, RegisterForm
 from app.models import Package, PackageInformation, User
-import requests
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
@@ -13,8 +10,11 @@ from werkzeug.urls import url_parse
 @app.route('/')
 @app.route('/index')
 def index():
-    packages = User.user_packages(current_user)
-    return render_template('index.html', title='Página Inicial', packages=packages)
+    if current_user.is_authenticated:
+        packages = User.user_packages(current_user)
+        return render_template('index.html', title='Página Inicial', packages=packages)
+    else:
+        return render_template('index.html', title='Página Inicial')    
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -64,9 +64,11 @@ def package_registration():
 @app.route('/track/<cod>')
 @login_required
 def track(cod):   
-    link = "https://proxyapp.correios.com.br/v1/sro-rastro/" + cod
-    response = requests.get(link)
-    data = response.json()
+
+    data = function.getApiData(cod)
+
+    package = Package.package_description(cod)
+    
     PackageInformation.quantity = data["quantidade"]
     PackageInformation.cod = cod
     PackageInformation.categoria = data["objetos"][0]["tipoPostal"]["categoria"]
@@ -99,6 +101,6 @@ def track(cod):
 
         PackageInformation.dados.append([descricao, cidade, cidadeDestino, dia, hora, detalhe])
 
-    return render_template('track.html', title='Encomenda', packageinformation=PackageInformation)
+    return render_template('track.html', title='Encomenda', packageinformation=PackageInformation, package=package)
 
 
