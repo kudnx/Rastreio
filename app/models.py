@@ -37,9 +37,9 @@ class User(UserMixin, db.Model):
 class PackageInformation():
     quantity = 0
     cod      = ""
-    categoria = ""
-    destinatario = ""
-    dados = [[]]
+    categoty = ""
+    recipient = ""
+    data = [[]]
     
 
     def __repr__(self):

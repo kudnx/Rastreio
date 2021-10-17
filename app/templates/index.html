@@ -2,22 +2,32 @@
 
 {% block content %}
     {% if current_user.is_anonymous %}
-        <h1>Por favor, faça login ou entre para verificar as suas encomendas:</h1>
+        <div class="row">
+            <div class="index_main">
+                <h3>Por favor, faça login ou entre para verificar as suas encomendas:</h3>
+                <a type="button" class="btn btn-primary btn-lg" href="{{ url_for('register') }} ">Cadastro</a>
+                <a type="button" class="btn btn-primary btn-lg" href="{{ url_for('login') }} ">Entrar</a>
+            </div> 
+        </div>               
     {% else %}
-        <h1>Olá, {{ current_user.username }}</h1><br><br>
-        <table>
-            <tr>
-                <th>Descrição</th>
-                <th>Código</th>
-                <th>Rastrear</th>
-            </tr>
-            {% for package in packages %}
-            <tr>
-                <td>{{ package.description }}</td>
-                <td>{{ package.cod }}</td>
-                <td><a href="{{ url_for('track', cod=package.cod) }}">Rastrear</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+        <h1 id="index_title">Olá, {{ current_user.username }}:</h1>
+        <div class="row">
+            <div class="index_table">
+                <table class="table table-dark text-center">
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Código</th>
+                        <th>Rastrear</th>
+                    </tr>
+                    {% for package in packages %}
+                    <tr>
+                        <td>{{ package.description }}</td>
+                        <td>{{ package.cod }}</td>
+                        <td><a class="btn btn-primary" href="{{ url_for('track', cod=package.cod) }}">Rastrear</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div> 
+        </div> 
     {% endif %}
 {% endblock %}

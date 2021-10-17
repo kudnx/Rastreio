@@ -67,39 +67,49 @@ def track(cod):
 
     data = function.getApiData(cod)
 
+    try:
+        mensagem = data["objetos"][0]["mensagem"]
+    except: 
+        mensagem = ''
+
+    if mensagem != '':
+        return render_template('package_not_found.html')
+
+    print ()
+
     package = Package.package_description(cod)
     
     PackageInformation.quantity = data["quantidade"]
     PackageInformation.cod = cod
-    PackageInformation.categoria = data["objetos"][0]["tipoPostal"]["categoria"]
+    PackageInformation.categoty = data["objetos"][0]["tipoPostal"]["categoria"]
 
-    PackageInformation.dados.clear()
+    PackageInformation.data.clear()
 
-    for dados in data["objetos"][0]["eventos"]:
-        descricao = dados["descricao"]
+    for data in data["objetos"][0]["eventos"]:
+        description = data["descricao"]
 
-        dataHora = dados["dtHrCriado"].split("T")
+        dateTime = data["dtHrCriado"].split("T")
         
-        dia = dataHora[0].split("-")
-        dia = dia[2] + "/" + dia[1] + "/" + dia[0]
-        hora = dataHora[1]
+        day = dateTime[0].split("-")
+        day = day[2] + "/" + day[1] + "/" + day[0]
+        hour = dateTime[1]
 
         try:
-            cidade = dados["unidade"]["endereco"]["cidade"]
+            city = data["unidade"]["endereco"]["cidade"]
         except: 
-            cidade = dados["unidade"]["nome"]
+            city = data["unidade"]["nome"]
 
         try:
-            cidadeDestino = dados["unidadeDestino"]["endereco"]["cidade"]
+            destinationCity = data["unidadeDestino"]["endereco"]["cidade"]
         except: 
-            cidadeDestino = ''
+            destinationCity = ''
 
         try:
-            detalhe = dados["detalhe"]
+            detail = data["detalhe"]
         except: 
-            detalhe = ''
+            detail = ''
 
-        PackageInformation.dados.append([descricao, cidade, cidadeDestino, dia, hora, detalhe])
+        PackageInformation.data.append([description, city, destinationCity, day, hour, detail])
 
     return render_template('track.html', title='Encomenda', packageinformation=PackageInformation, package=package)
 

@@ -1,23 +1,27 @@
 {% extends "menu.html" %}
 
 {% block content %}
-    <h1>Cadastro de Encomenda</h1>
-    <form action="" method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.description.label }}<br>
-            {{ form.description }}
-            {% for error in form.description.errors %} <br>
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.cod.label }}<br>
-            {{ form.cod }}
-            {% for error  in form.cod.errors %} <br>
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+    <div class="row">
+        <div class="package_registration">
+            <h1>Cadastro de Encomenda</h1>
+            <form action="" method="POST" novalidate>
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.description.label }}<br>
+                    {{ form.description }}
+                    {% for error in form.description.errors %} <br>
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.cod.label }}<br>
+                    {{ form.cod }}
+                    {% for error  in form.cod.errors %} <br>
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit() }}</p>
+            </form>
+        </div> 
+    </div> 
 {% endblock %}
